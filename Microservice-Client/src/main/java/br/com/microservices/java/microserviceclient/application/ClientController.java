@@ -3,6 +3,7 @@ package br.com.microservices.java.microserviceclient.application;
 import br.com.microservices.java.microserviceclient.application.representation.ClientRequest;
 import br.com.microservices.java.microserviceclient.domain.Client;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("clientes")
+@Slf4j
 public class ClientController {
 
     private final ClientService clientService;
@@ -23,6 +25,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity saveClient(@RequestBody ClientRequest clientRequest){
+        log.info("ENTROU AQUI");
         var client= clientRequest.toModel();
         clientService.saveClient(client);
         URI headerLocation = ServletUriComponentsBuilder.fromCurrentRequest()

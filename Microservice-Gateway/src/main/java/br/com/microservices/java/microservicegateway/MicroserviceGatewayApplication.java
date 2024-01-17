@@ -19,9 +19,13 @@ public class MicroserviceGatewayApplication {
     public RouteLocator routes(RouteLocatorBuilder routeLocatorBuilder){
         return routeLocatorBuilder
                 .routes()
-                    .route(r ->
-                            r.path("/clientes/**")
-                                    .uri("lb://MSCLIENTS"))
+                .route(r ->
+                        r.path("/clientes/**")
+                            .uri("lb://MSCLIENTS"))
+                .route(r ->
+                        r.path("/cartoes/**")
+                                .uri("lb://MSCARTOES")
+                )
                 .build();
     }
 }
