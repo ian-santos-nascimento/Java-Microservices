@@ -16,16 +16,18 @@ public class MicroserviceGatewayApplication {
     }
 
     @Bean
-    public RouteLocator routes(RouteLocatorBuilder routeLocatorBuilder){
+    public RouteLocator routes(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder
                 .routes()
                 .route(r ->
                         r.path("/clientes/**")
-                            .uri("lb://MSCLIENTS"))
+                                .uri("lb://MSCLIENTS"))
                 .route(r ->
                         r.path("/cartoes/**")
                                 .uri("lb://MSCARTOES")
-                )
+                ).route(r ->
+                        r.path("/avaliacoes-credito/**")
+                                .uri("lb://MSAVALIADORCREDITO"))
                 .build();
     }
 }
