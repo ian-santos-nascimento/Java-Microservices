@@ -2,5 +2,5 @@ package br.com.microservices.java.microserviceavaliadorcredito.application.domai
 
 import java.math.BigDecimal;
 
-public record Cartao(String nome, Long id, String bandeira, BigDecimal limiteBasico) {
+public record Cartao(String nome, Long id, String bandeira, BigDecimal limite) {
 }
