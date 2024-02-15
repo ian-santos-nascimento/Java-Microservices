@@ -3,12 +3,13 @@ spring:
     name: eurekaserver
   security:
     user:
-      name: user
-      password: user
-
+      name: ${EUREKA_USERNAME}
+      password: ${EUREKA_PASSWORD}
 server:
   port: 8761
 eureka:
   client:
+    service-url:
+      defaultZone: http://user:user@eureka:8761/eureka/
     register-with-eureka: false
     fetch-registry: false

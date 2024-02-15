@@ -10,6 +10,9 @@
 - Imagens Docker e containers 
 
 ### Instalação necessário
+- Java 17
+- Maven 3.6.0
+- Docker
 
 
 ##### Configurar RabbitMQ image
@@ -36,3 +39,4 @@ Doc:https://www.keycloak.org/getting-started/getting-started-docker
     4-Fazer solicitação da emissão do cartão disponível no 3ª passo (http://localhost:8080/avaliacoes-credito/solicitacoes-cartao)
 
 ### Mapeamento das rotas da API
+- Todas as apis estão disponíveis no path "swagger-ui/index.html" de cada microservice rodando (lembrando que não é possível acessar passando a porta do gateway, apenas a porta correta do microserviço)
