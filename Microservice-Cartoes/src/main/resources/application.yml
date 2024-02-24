@@ -1,25 +1,3 @@
 spring:
-  application:
-    name: mscartoes
-  datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
-  rabbitmq:
-    host: localhost
-    port: 5672
-
-eureka:
-  client:
-    eureka-server-port: 8761
-    service-url:
-      defaultZone: http://user:user@localhost:8761/eureka/
-  instance:
-    instance-id: ${spring.application.name}:${random.value}
-server:
-  port: 0
-
-mq:
-  queues:
-    emissao-cartoes: emissao-cartoes
+  profiles:
+    active: "local"

@@ -12,9 +12,83 @@ services:
     image: quay.io/keycloak/keycloak:23.0.6
     container_name: keycloak
     ports:
-      - "8081:8080"
+      - "8081:8081"
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
     command: start-dev
     tty: true
+  database:
+    image: oscarfonts/h2
+    ports:
+      - "8082:8082" # Expose H2 console port
+      - "1521:1521" # Expose H2 server port
+    volumes:
+      - ./data:/opt/h2-data # Mount volume to persist data
+    environment:
+      - H2_OPTIONS=-ifNotExists
+      - DATABASE_NAME=testdb # Define the database name here
+      - H2_USER=sa
+      - H2_PASSWORD=password
+  eureka:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    depends_on:
+      - rabbitmq
+      - keycloak
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev  # Set your Spring Boot profiles if needed
+      - EUREKA_USERNAME=user
+      - EUREKA_PASSWORD=user
+    tty: true
+  client:
+    build:
+      context: ./Microservice-Client
+      dockerfile: Dockerfile
+    container_name: client
+    depends_on:
+      - eureka
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
+      - EUREKA_USERNAME=user
+      - EUREKA_PASSWORD=user
+      - KEYCLOAK_URL=http://keycloak:8081/realms/mscourserealm/protocol/openid-connect/token
+  gateway:
+    build:
+      context: ./Microservice-Gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_USERNAME=user
+      - EUREKA_PASSWORD=user
+      - KEYCLOAK_URL=http://keycloak:8081/realms/mscourserealm/protocol/openid-connect/token
+#  cartoes:
+ #   build:
+  #    context: ./Microservice-Cartoes
+   #   dockerfile: Dockerfile
+    #container_name: cartoes
+    #depends_on:
+    #  - database
+     # - eureka
+     # - gateway
+    #environment:
+     # - SPRING_PROFILES_ACTIVE=dev  # Set your Spring Boot profiles if needed
+      #- EUREKA_USERNAME=user
+      #- EUREKA_PASSWORD=user
+      #- SPRING_DATASOURCE_URL=jdbc:h2:tcp://database:1521/
+      #- SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.h2.Driver
+      #- SPRING_DATASOURCE_USERNAME=${H2_USER} # Use the correct variable name for username
+      #- SPRING_DATASOURCE_PASSWORD=${H2_PASSWORD} # Use the correct variable name for password
+      #- KEYCLOAK_URL=http://keycloak:8081/realms/mscourserealm/protocol/openid-connect/token
+    #tty: true
+
+####
